@@ -490,28 +490,7 @@ Este projeto foi desenvolvido para fins acadêmicos.
 ## 👨‍💻 Autor
 
 **[Seu Nome]**
-- GitHub: [@Rhuam12](https://github.com/Rhuam12)
-- LinkedIn: [Seu LinkedIn]
-- Email: [seu.email@exemplo.com]
-
----
-
-## 🎓 Projeto Acadêmico
-
-Este projeto foi desenvolvido como trabalho de conclusão da disciplina **[Nome da Disciplina]** do curso **[Nome do Curso]** na **[Nome da Instituição]**.
-
-**Orientador:** [Nome do Professor]  
-**Período:** [Semestre/Ano]
-
----
-
-## 🙏 Agradecimentos
-
-- **Anthropic** - Pelo suporte via Claude
-- **Vercel** - Pela plataforma Next.js
-- **Supabase** - Pelo backend fantástico
-- **Tailwind Labs** - Pelo framework CSS
-- **Recharts** - Pela biblioteca de gráficos
+- GitHub: [@Rhuan12](https://github.com/Rhuan12)
 
 ---
 
@@ -528,7 +507,7 @@ Se encontrar problemas:
 
 <div align="center">
 
-**Desenvolvido com 🦇 por [Seu Nome]**
+**Desenvolvido com 🦇 por Rhuan Mateus**
 
 ⭐ Se este projeto foi útil, deixe uma estrela no GitHub!
 
