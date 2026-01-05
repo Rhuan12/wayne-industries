@@ -291,30 +291,6 @@ Use uma das contas abaixo para fazer login:
 
 ---
 
-## 📸 Screenshots
-
-### 🔐 **Tela de Login**
-![Login](./docs/screenshots/login.png)
-*Sistema de autenticação seguro com tema Wayne Industries*
-
-### 📊 **Dashboard Principal**
-![Dashboard](./docs/screenshots/dashboard.png)
-*Visão geral com estatísticas, gráficos e atividades recentes*
-
-### 📦 **Gerenciamento de Recursos**
-![Recursos](./docs/screenshots/resources.png)
-*CRUD completo com filtros e busca avançada*
-
-### 🛡️ **Controle de Segurança**
-![Segurança](./docs/screenshots/security.png)
-*Monitoramento de acessos e áreas restritas*
-
-### 👤 **Perfil do Usuário**
-![Perfil](./docs/screenshots/profile.png)
-*Informações pessoais e estatísticas de uso*
-
----
-
 ## 🗄️ Estrutura do Banco de Dados
 
 ### **Tabelas Principais**
