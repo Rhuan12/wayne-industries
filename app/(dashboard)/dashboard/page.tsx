@@ -1,9 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Package, ShieldCheck, Users, Activity } from 'lucide-react'
+import { Package, ShieldCheck, Users, Activity as ActivityIcon } from 'lucide-react'
 import { RecentActivitiesList } from '@/components/dashboard/recent-activities-list'
 import { ResourcesChart } from '@/components/dashboard/resources-chart'
 import { AccessLogsChart } from '@/components/dashboard/access-logs-chart'
+import { Activity } from '@/types'
 
 async function getDashboardStats() {
   const supabase = createClient()
@@ -29,7 +30,7 @@ async function getDashboardStats() {
     .select('*', { count: 'exact', head: true })
     .gte('timestamp', today.toISOString())
 
-  const { data: recentActivities } = await supabase
+  const { data: activitiesData } = await supabase
     .from('activities')
     .select(`
       *,
@@ -40,6 +41,8 @@ async function getDashboardStats() {
     `)
     .order('timestamp', { ascending: false })
     .limit(5)
+
+  const recentActivities = (activitiesData || []) as Activity[]
 
   const { count: equipmentCount } = await supabase
     .from('resources')
@@ -61,7 +64,7 @@ async function getDashboardStats() {
     availableResources: availableResources || 0,
     totalUsers: totalUsers || 0,
     todayAccesses: todayAccesses || 0,
-    recentActivities: recentActivities || [],
+    recentActivities,
     resourcesByType: {
       equipment: equipmentCount || 0,
       vehicle: vehicleCount || 0,
@@ -133,7 +136,7 @@ export default async function DashboardPage() {
             <CardTitle className="text-sm font-medium">
               Atividades Recentes
             </CardTitle>
-            <Activity className="h-4 w-4 text-purple-400" />
+            <ActivityIcon className="h-4 w-4 text-purple-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">

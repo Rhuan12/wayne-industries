@@ -3,11 +3,12 @@ import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import { ResourcesList } from '@/components/resources/resources-list'
 import Link from 'next/link'
+import { Resource } from '@/types'
 
 async function getResources() {
   const supabase = createClient()
 
-  const { data: resources } = await supabase
+  const { data } = await supabase
     .from('resources')
     .select(`
       *,
@@ -18,7 +19,7 @@ async function getResources() {
     `)
     .order('created_at', { ascending: false })
 
-  return resources || []
+  return (data || []) as Resource[]
 }
 
 export default async function ResourcesPage() {

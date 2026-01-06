@@ -5,17 +5,18 @@ import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { notFound } from 'next/navigation'
+import { Resource } from '@/types'
 
 async function getResource(id: string) {
   const supabase = createClient()
   
-  const { data: resource } = await supabase
+  const { data } = await supabase
     .from('resources')
     .select('*')
     .eq('id', id)
     .single()
 
-  return resource
+  return data as Resource | null
 }
 
 export default async function EditResourcePage({

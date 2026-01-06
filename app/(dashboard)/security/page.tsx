@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ShieldCheck, AlertTriangle, CheckCircle2 } from 'lucide-react'
 import { AccessLogsList } from '@/components/security/access-logs-list'
 import { RestrictedAreasList } from '@/components/security/restricted-areas-list'
+import { AccessLog, RestrictedArea } from '@/types'
 
 async function getSecurityStats() {
   const supabase = createClient()
@@ -26,7 +27,7 @@ async function getSecurityStats() {
     .select('*', { count: 'exact', head: true })
     .eq('is_active', true)
 
-  const { data: recentLogs } = await supabase
+  const { data: logsData } = await supabase
     .from('access_logs')
     .select(`
       *,
@@ -43,17 +44,21 @@ async function getSecurityStats() {
     .order('timestamp', { ascending: false })
     .limit(10)
 
-  const { data: areas } = await supabase
+  const recentLogs = (logsData || []) as AccessLog[]
+
+  const { data: areasData } = await supabase
     .from('restricted_areas')
     .select('*')
     .order('created_at', { ascending: false })
+
+  const areas = (areasData || []) as RestrictedArea[]
 
   return {
     todayLogs: todayLogs || 0,
     deniedToday: deniedToday || 0,
     activeAreas: activeAreas || 0,
-    recentLogs: recentLogs || [],
-    areas: areas || [],
+    recentLogs,
+    areas,
   }
 }
 

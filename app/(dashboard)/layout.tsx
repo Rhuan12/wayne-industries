@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Sidebar } from '@/components/dashboard/sidebar'
 import { redirect } from 'next/navigation'
 import { getRoleLabel } from '@/lib/utils'
+import { UserProfile } from '@/types'
 
 export default async function DashboardLayout({
   children,
@@ -16,11 +17,13 @@ export default async function DashboardLayout({
     redirect('/login')
   }
 
-  const { data: profile } = await supabase
+  const { data } = await supabase
     .from('user_profiles')
     .select('*')
     .eq('id', user.id)
     .single()
+
+  const profile = data as UserProfile | null
 
   return (
     <div className="flex h-screen bg-gray-950">

@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { User, Mail, Briefcase, Calendar } from 'lucide-react'
 import { getRoleLabel, formatDate } from '@/lib/utils'
 import { redirect } from 'next/navigation'
+import { UserProfile, Activity } from '@/types'
 
 async function getUserProfile() {
   const supabase = createClient()
@@ -14,11 +15,13 @@ async function getUserProfile() {
     redirect('/login')
   }
 
-  const { data: profile } = await supabase
+  const { data } = await supabase
     .from('user_profiles')
     .select('*')
     .eq('id', user.id)
     .single()
+
+  const profile = data as UserProfile | null
 
   const { count: resourcesCreated } = await supabase
     .from('resources')
@@ -30,12 +33,14 @@ async function getUserProfile() {
     .select('*', { count: 'exact', head: true })
     .eq('user_id', user.id)
 
-  const { data: recentActivities } = await supabase
+  const { data: activitiesData } = await supabase
     .from('activities')
     .select('*')
     .eq('user_id', user.id)
     .order('timestamp', { ascending: false })
     .limit(5)
+
+  const recentActivities = (activitiesData || []) as Activity[]
 
   return {
     user,
@@ -44,7 +49,7 @@ async function getUserProfile() {
       resourcesCreated: resourcesCreated || 0,
       activitiesCount: activitiesCount || 0,
     },
-    recentActivities: recentActivities || [],
+    recentActivities,
   }
 }
 
