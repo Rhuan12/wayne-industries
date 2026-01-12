@@ -41,8 +41,8 @@ export function ResourceForm({ resource }: ResourceFormProps) {
     defaultValues: resource
       ? {
           name: resource.name,
-          type: resource.type as 'equipment' | 'vehicle' | 'security_device',
-          status: resource.status as 'available' | 'in_use' | 'maintenance' | 'retired',
+          type: resource.type as any,
+          status: resource.status as any,
           description: resource.description || '',
           location: resource.location || '',
         }
@@ -64,8 +64,8 @@ export function ResourceForm({ resource }: ResourceFormProps) {
       }
 
       if (resource) {
-        // Atualizar recurso existente - TYPE ASSERTION COMPLETO
-        const updateData = {
+        // Atualizar recurso existente
+        const updateData: Record<string, any> = {
           name: data.name,
           type: data.type,
           status: data.status,
@@ -74,8 +74,7 @@ export function ResourceForm({ resource }: ResourceFormProps) {
           updated_at: new Date().toISOString(),
         }
 
-        // @ts-ignore - Ignorar erro de tipo do Supabase
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('resources')
           .update(updateData)
           .eq('id', resource.id)
@@ -83,8 +82,7 @@ export function ResourceForm({ resource }: ResourceFormProps) {
         if (error) throw error
 
         // Registrar atividade
-        // @ts-ignore - Ignorar erro de tipo do Supabase
-        await supabase.from('activities').insert({
+        await (supabase as any).from('activities').insert({
           user_id: user.id,
           resource_id: resource.id,
           action_type: 'update_resource',
@@ -93,8 +91,8 @@ export function ResourceForm({ resource }: ResourceFormProps) {
 
         toast.success('Recurso atualizado com sucesso!')
       } else {
-        // Criar novo recurso - TYPE ASSERTION COMPLETO
-        const insertData = {
+        // Criar novo recurso
+        const insertData: Record<string, any> = {
           name: data.name,
           type: data.type,
           status: data.status,
@@ -103,16 +101,14 @@ export function ResourceForm({ resource }: ResourceFormProps) {
           created_by: user.id,
         }
 
-        // @ts-ignore - Ignorar erro de tipo do Supabase
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('resources')
           .insert(insertData)
 
         if (error) throw error
 
         // Registrar atividade
-        // @ts-ignore - Ignorar erro de tipo do Supabase
-        await supabase.from('activities').insert({
+        await (supabase as any).from('activities').insert({
           user_id: user.id,
           action_type: 'create_resource',
           description: `Criou o recurso: ${data.name}`,
