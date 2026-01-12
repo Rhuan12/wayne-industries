@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { createClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
 import { Resource } from '@/types'
+import { Database } from '@/types/database.types'
 
 const resourceSchema = z.object({
   name: z.string().min(3, 'Nome deve ter no mínimo 3 caracteres'),
@@ -64,37 +65,59 @@ export function ResourceForm({ resource }: ResourceFormProps) {
       }
 
       if (resource) {
+        // Atualizar recurso existente
+        const updateData: Database['public']['Tables']['resources']['Update'] = {
+          name: data.name,
+          type: data.type,
+          status: data.status,
+          description: data.description || null,
+          location: data.location || null,
+          updated_at: new Date().toISOString(),
+        }
+
         const { error } = await supabase
           .from('resources')
-          .update({
-            ...data,
-            updated_at: new Date().toISOString(),
-          })
+          .update(updateData)
           .eq('id', resource.id)
 
         if (error) throw error
 
-        await supabase.from('activities').insert({
+        // Registrar atividade
+        const activityData: Database['public']['Tables']['activities']['Insert'] = {
           user_id: user.id,
           resource_id: resource.id,
           action_type: 'update_resource',
           description: `Atualizou o recurso: ${data.name}`,
-        })
+        }
+
+        await supabase.from('activities').insert(activityData)
 
         toast.success('Recurso atualizado com sucesso!')
       } else {
-        const { error } = await supabase.from('resources').insert({
-          ...data,
+        // Criar novo recurso
+        const insertData: Database['public']['Tables']['resources']['Insert'] = {
+          name: data.name,
+          type: data.type,
+          status: data.status,
+          description: data.description || null,
+          location: data.location || null,
           created_by: user.id,
-        })
+        }
+
+        const { error } = await supabase
+          .from('resources')
+          .insert(insertData)
 
         if (error) throw error
 
-        await supabase.from('activities').insert({
+        // Registrar atividade
+        const activityData: Database['public']['Tables']['activities']['Insert'] = {
           user_id: user.id,
           action_type: 'create_resource',
           description: `Criou o recurso: ${data.name}`,
-        })
+        }
+
+        await supabase.from('activities').insert(activityData)
 
         toast.success('Recurso criado com sucesso!')
       }
@@ -188,7 +211,7 @@ export function ResourceForm({ resource }: ResourceFormProps) {
           Cancelar
         </Button>
         <Button type="submit" disabled={loading}>
-          {loading ? 'Salvando...' : resource ? 'Atualizar' : 'Criar'}
+          {loading ? 'Salvando...' : resource ? 'Atualizar' : 'Criar Recurso'}
         </Button>
       </div>
     </form>
