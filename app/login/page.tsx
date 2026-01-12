@@ -22,7 +22,7 @@ export default function LoginPage() {
         <LoginForm />
 
         <div className="mt-8 text-center text-sm text-gray-500">
-          <p>© 2024 Wayne Industries. Todos os direitos reservados.</p>
+          <p>© 2026 Wayne Industries. Todos os direitos reservados.</p>
         </div>
       </div>
     </div>
