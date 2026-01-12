@@ -1,12 +1,11 @@
 'use client'
 
-import { AccessLogWithDetails } from '@/types'
 import { Badge } from '@/components/ui/badge'
 import { getAccessColor, getActionLabel, formatDate, getRoleLabel } from '@/lib/utils'
 import { ShieldAlert, ShieldCheck, LogOut } from 'lucide-react'
 
 interface AccessLogsListProps {
-  logs: AccessLogWithDetails[]
+  logs: any[]
 }
 
 export function AccessLogsList({ logs }: AccessLogsListProps) {
@@ -34,7 +33,7 @@ export function AccessLogsList({ logs }: AccessLogsListProps) {
 
   return (
     <div className="space-y-3">
-      {logs.map((log) => {
+      {logs.map((log: any) => {
         const Icon = getActionIcon(log.action)
         return (
           <div
